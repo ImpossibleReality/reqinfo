@@ -11,8 +11,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-// return request info back to the user
-app.use(function(req, res, next) {
+function handle(req, res, next) {
   const data = {};
 
   data['url'] = req.url;
@@ -25,6 +24,12 @@ app.use(function(req, res, next) {
   data['ip'] = req.ip;
 
   res.send(data);
-});
+}
+
+// handle all possible routes
+app.get('*', handle);
+
+// return request info back to the user
+app.use(handle);
 
 module.exports = app;
